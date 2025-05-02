@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, session, jsonify, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
+from datetime import datetime
 
 app = Flask(__name__)
 
@@ -19,6 +20,43 @@ class Users(db.Model):
     password = db.Column(db.String(30), nullable=False)
     access = db.Column(db.String(64), nullable=False, default='user')
 
+class ForumSections(db.Model):
+    __tablename__ = 'forum_sections'
+    id = db.Column(db.Integer, primary_key=True)
+    section = db.Column(db.String(32), unique=True, nullable=False)
+    category = db.relationship('ForumCategory', backref='section', lazy=True)
+    posts = db.relationship('ForumPosts', backref='section', lazy=True)
+
+class ForumCategory(db.Model):
+    __tablename__ = 'forum_categories'
+    id = db.Column(db.Integer, primary_key=True)
+    category = db.Column(db.String(32), unique=True, nullable=False)
+    section_id = db.Column(db.Integer, db.ForeignKey('forum_sections.id'), nullable=False)
+    posts = db.relationship('ForumPosts', backref='category', lazy=True)
+
+class ForumPosts(db.Model):
+    __tablename__ = 'forum_posts'
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    theme = db.Column(db.String(124), nullable=False)
+    text = db.Column(db.Text, nullable=False)
+    section_id = db.Column(db.Integer, db.ForeignKey('forum_sections.id'), nullable=False)
+    category_id = db.Column(db.Integer, db.ForeignKey('forum_categories.id'), nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.now)
+    user = db.relationship("Users", backref="posts")
+    sections = db.relationship("ForumSections")
+    categories = db.relationship("ForumCategory")
+
+class ForumComments(db.Model):
+    __tablename__ = 'forum_comments'
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    text = db.Column(db.Text, nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.now)
+    post_id = db.Column(db.Integer, db.ForeignKey('forum_posts.id'), nullable=False)
+    user = db.relationship("Users", backref="comments")
+    post = db.relationship('ForumPosts', backref='comments')
+
 @app.route('/')
 def main():
     return render_template('main.html')
@@ -26,6 +64,28 @@ def main():
 
 @app.route('/post-creation')
 def create():
+    sections = ForumSections.query.all()
+    if not sections:
+        sections = ('Электроника', "Игры", "Общение")
+        for i in sections:
+            new_section = ForumSections(section=i)
+            db.session.add(new_section)
+        db.session.commit()
+    category = ForumCategory.query.all()
+    if not category:
+        category1 = ('Микроволновки', "Ноутбуки", "Пылесосы")
+        category2 = ('Экшен', "Стратегии", "2Д")
+        category3 = ('Еда', "Спорт", "Новости")
+        for i in category1:
+            new_category = ForumCategory(category=i, section_id=1)
+            db.session.add(new_category)
+        for i in category2:
+            new_category = ForumCategory(category=i, section_id=2)
+            db.session.add(new_category)
+        for i in category3:
+            new_category = ForumCategory(category=i, section_id=3)
+            db.session.add(new_category)
+        db.session.commit()
     return render_template('post-creation.html')
 
 
