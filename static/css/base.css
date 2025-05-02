@@ -37,6 +37,7 @@ header div button {
   color: white;
   margin-right: 10px;
   font-size: 18px;
+  cursor: pointer;
 }
 header div input {
   margin: 0;
