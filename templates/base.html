@@ -36,9 +36,9 @@
     </header>
     <main class="main">
         <div class="main-links">
-            <a href="">Главная</a>
+            <a href="{{url_for('main')}}">Главная</a>
             <a href="">Посты</a>
-            <a href="">Создать пост</a>
+            <a href="post-creation">Создать пост</a>
             <a href="">Профиль</a>
         </div>
         {% block main %}{% endblock %}

@@ -19,6 +19,7 @@ header {
 }
 header h1 {
   color: white;
+  text-shadow: 0 1px 10px rgba(51, 51, 51, 0.5);
 }
 header div {
   display: flex;
@@ -38,10 +39,15 @@ header div button {
   margin-right: 10px;
   font-size: 18px;
   cursor: pointer;
+  transition: 0.3s ease;
+  box-shadow: 0 1px 10px rgba(51, 51, 51, 0.5);
 }
 header div button a {
   text-decoration: none;
   color: white;
+}
+header div button:hover {
+  background-color: rgb(31, 210, 22);
 }
 header div input {
   margin: 0;
@@ -49,6 +55,10 @@ header div input {
   border-radius: 5px;
   font-size: 16px;
   border: 1px solid rgba(51, 51, 51, 0.5);
+  box-shadow: 0 1px 10px rgba(51, 51, 51, 0.5);
+}
+header div input:focus {
+  border-color: #4CAF50;
 }
 header div p {
   font-size: 18px;
@@ -65,12 +75,17 @@ header div p {
   padding: 10px;
   display: flex;
   gap: 15px;
-  font-size: 18px;
+  font-size: 22px;
   border-bottom: 1px solid rgba(51, 51, 51, 0.2);
 }
 .main .main-links a {
   text-decoration: none;
   color: #47b941;
+  transition: 0.3s ease;
+  text-shadow: 0 1px 10px rgba(51, 51, 51, 0.2);
+}
+.main .main-links a:hover {
+  color: rgba(66, 164, 61, 0.624);
 }
 
 .footer {

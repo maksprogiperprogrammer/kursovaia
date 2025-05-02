@@ -23,6 +23,12 @@ class Users(db.Model):
 def main():
     return render_template('main.html')
 
+
+@app.route('/post-creation')
+def create():
+    return render_template('post-creation.html')
+
+
 @app.route('/reg', methods=['POST'])
 def reg():
     username = request.form['loginreg']
