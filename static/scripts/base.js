@@ -16,3 +16,47 @@ logBtn.addEventListener('click', function(){
     logForm.classList.remove('hidden')
     regForm.classList.add('hidden')
 })
+
+regForm.addEventListener('submit', function(event){
+    event.preventDefault();
+    const newData = new FormData(this);
+
+    fetch('/reg', {
+        method: 'POST',
+        body: newData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.answer) {
+            document.getElementById('reg-message').textContent = data.message;
+            setTimeout(function() {
+                window.location.href = 'profile'; 
+            }, 500); 
+        } else {
+            document.getElementById('reg-message').textContent = data.message;
+        }
+    })
+    .catch(error => console.error('Ошибка:',error));
+})
+
+logForm.addEventListener('submit', function(event){
+    event.preventDefault();
+    const newData = new FormData(this);
+
+    fetch('/log', {
+        method: 'POST',
+        body: newData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.answer) {
+            document.getElementById('log-message').textContent = data.message;
+            setTimeout(function() {
+                window.location.href = 'profile'; 
+            }, 500); 
+        } else {
+            document.getElementById('log-message').textContent = data.message;
+        }
+    })
+    .catch(error => console.error('Ошибка:',error));
+})

@@ -13,21 +13,25 @@
     <header class="header">
         <h1>PRONINCHAN</h1>
         <div>
+            {% if not session['user'] %}
             <button id="reg-btn">Регистрация</button>
             <button class="hidden" id="log-btn">Вход:</button>
             <form action="" id="log-form">
-                <p>Вход</p>
+                <p id="log-message">Вход</p>
                 <input type="text" name="login" id="login" placeholder="Имя">
-                <input type="text" name="password" id="password" placeholder="Пароль">
+                <input type="password" name="password" id="password" placeholder="Пароль">
                 <button>Войти</button>
             </form>
             <form action="" class="hidden" id="reg-form">
-                <p>Регистрация</p>
-                <input type="text" name="login" id="loginreg" placeholder="Имя">
-                <input type="text" name="email" id="email" placeholder="Почта">
-                <input type="text" name="password" id="passwordreg" placeholder="Пароль">
+                <p id="reg-message">Регистрация</p>
+                <input type="text" name="loginreg" id="loginreg" placeholder="Имя">
+                <input type="text" name="emailreg" id="email" placeholder="Почта">
+                <input type="password" name="passwordreg" id="passwordreg" placeholder="Пароль">
                 <button>Зарегистрироваться</button>
             </form>
+            {% else %}
+                <button><a href="logout">Выйти</a></button>
+            {% endif %}
         </div>
     </header>
     <main class="main">

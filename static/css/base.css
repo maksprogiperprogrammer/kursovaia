@@ -39,6 +39,10 @@ header div button {
   font-size: 18px;
   cursor: pointer;
 }
+header div button a {
+  text-decoration: none;
+  color: white;
+}
 header div input {
   margin: 0;
   padding: 10px 15px;
