@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PRONINCHAN</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+</head>
+<body>
+    <header class="header">
+        <h1>PRONINCHAN</h1>
+        <div>
+            <button>Регистрация</button>
+            <button class="hidden">Вход:</button>
+            <form action="">
+                <p>Вход</p>
+                <input type="text" name="login" id="login" placeholder="Имя">
+                <input type="text" name="password" id="password" placeholder="Пароль">
+                <button>Войти</button>
+            </form>
+            <form action="" class="hidden">
+                <p>Регистрация</p>
+                <input type="text" name="login" id="loginreg" placeholder="Имя">
+                <input type="text" name="email" id="email" placeholder="Почта">
+                <input type="text" name="password" id="passwordreg" placeholder="Пароль">
+                <button>Зарегистрироваться</button>
+            </form>
+        </div>
+    </header>
+    <main class="main">
+        <div class="main-links">
+            <a href="">Главная</a>
+            <a href="">Посты</a>
+            <a href="">Создать пост</a>
+            <a href="">Профиль</a>
+        </div>
+        {% block main %}{% endblock %}
+    </main>
+    <footer class="footer">
+        <p>PRONINCHAN</p>
+        <p>Все права защищены</p>
+    </footer>
+</body>
+</html>
