@@ -3,19 +3,19 @@
 <link rel="stylesheet" href="{{url_for('static', filename='css/posts.css')}}">
 <div class="posts">
     <div class="posts-sections">
-        <p class="section">Все</p>
+        <p class="section" data-section-id="all">Все</p>
         {% for section in sections %}
-            <p class="section">{{section.section}}</p>
+            <p class="section" data-section-id="{{section.id}}">{{section.section}}</p>
         {% endfor %}
     </div>
     <div class="posts-categories">
         {% for category in category %}
-            <p class="category">{{category.category}}</p>
+            <p class="category" data-section-id="{{category.section_id}}" data-category-id="{{category.id}}">{{category.category}}</p>
         {% endfor %}
     </div>
     <div class="posts-container">
         {% for post in posts %}
-            <div class="post">
+            <div class="post" data-section-id="{{post.sections.id}}" data-category-id="{{post.categories.id}}">
                 
                 <a href="" class="post-theme">{{post.theme}}</a>
                 <div>
@@ -26,4 +26,5 @@
         {% endfor %}
     </div>
 </div>
+<script src="../static/scripts/posts.js"></script>
 {% endblock %}
