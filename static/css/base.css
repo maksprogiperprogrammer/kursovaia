@@ -77,7 +77,7 @@ header div p {
   padding: 10px;
   display: flex;
   gap: 15px;
-  font-size: 22px;
+  font-size: 24px;
   border-bottom: 1px solid rgba(51, 51, 51, 0.2);
 }
 .main .main-links a {

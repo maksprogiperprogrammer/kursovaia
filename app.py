@@ -59,7 +59,8 @@ class ForumComments(db.Model):
 
 @app.route('/')
 def main():
-    return render_template('main.html')
+    new_posts = ForumPosts.query.order_by(ForumPosts.created_at.desc()).limit(5).all()
+    return render_template('main.html', new_posts = new_posts)
 
 @app.route('/posts')
 def posts():
