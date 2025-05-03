@@ -1,0 +1,30 @@
+{% extends 'main.html' %}
+{% block main %}
+<link rel="stylesheet" href="{{url_for('static', filename='css/post.css')}}">
+    <div class="post-created">
+        <div>
+            <img src="../static/img/person.svg" alt="" class="profile-img" />
+            <p>{{post.user.username}}</p>
+        </div>
+        <p>{{post.created_at.strftime('%Y-%m-%d %H:%M')}}</p>
+    </div>
+    <div class="post-main">
+        <div>
+            <p>{{post.sections.section}}</p>
+            <p>{{post.categories.category}}</p>
+        </div>
+        <h2>{{post.theme}}</h2>
+        <p>{{post.text}}</p>
+    </div>
+    <div class="post-comments">
+        {% if session['user'] %}
+            <form action="">
+                <textarea name="" id=""></textarea>
+                <button>Отпубликовать</button>
+            </form>
+        {% endif %}
+        <div>
+            <p>комментарии</p>
+        </div>
+</div>
+{% endblock %}

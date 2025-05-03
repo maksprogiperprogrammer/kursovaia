@@ -68,6 +68,14 @@ def posts():
     posts = ForumPosts.query.all()
     return render_template('posts.html', posts=posts, category=category, sections=sections)
 
+@app.route('/post/<int:post>', methods=['GET','POST'])
+def post(post):
+    sections = ForumSections.query.all()
+    category = ForumCategory.query.all()
+    posts = ForumPosts.query.all()
+    post = ForumPosts.query.get_or_404(post)
+    return render_template('post.html', post=post, posts=posts, category=category, sections=sections)
+
 @app.route('/post-creation')
 def create():
     sections = ForumSections.query.all()
