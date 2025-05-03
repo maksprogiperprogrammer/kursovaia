@@ -88,6 +88,32 @@ def create():
         db.session.commit()
     return render_template('post-creation.html', category=category, sections=sections)
 
+@app.route('/create', methods=['POST'])
+def create_post():
+    if session.get('user'):
+        section = request.form['post-section']
+        category = request.form['post-category']
+        theme = request.form['post-title']
+        text = request.form['post-content']
+        user = session['user']
+        section_exist = ForumSections.query.filter_by(id=section).first()
+        category_exist = ForumCategory.query.filter_by(id=category).first()
+        if not section_exist:
+            return jsonify({'answer': False,'message': 'Выберите раздел'}) 
+        elif not category_exist:
+            return jsonify({'answer': False,'message': 'Выберите категорию'}) 
+        elif not theme.strip():
+            return jsonify({'answer': False,'message': 'Создайте заголовок'}) 
+        elif not text.strip():
+            return jsonify({'answer': False,'message': 'Напишите текст'}) 
+        new_post = ForumPosts(user_id=user, theme=theme, text=text, section_id=section, category_id=category)
+        try:
+            db.session.add(new_post)
+            db.session.commit()
+            return jsonify({'answer': True,'message': 'Пост успешно создан'})
+        except Exception as err:
+            db.session.rollback()
+            return jsonify({'answer': False,'message': 'Возникла ошибка'}) 
 
 @app.route('/reg', methods=['POST'])
 def reg():
