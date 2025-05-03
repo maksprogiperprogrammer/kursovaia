@@ -70,11 +70,12 @@ def posts():
 
 @app.route('/post/<int:post>', methods=['GET','POST'])
 def post(post):
+    comments = ForumComments.query.filter_by(post_id=post).all()
     sections = ForumSections.query.all()
     category = ForumCategory.query.all()
     posts = ForumPosts.query.all()
     post = ForumPosts.query.get_or_404(post)
-    return render_template('post.html', post=post, posts=posts, category=category, sections=sections)
+    return render_template('post.html', post=post, posts=posts, category=category, sections=sections, comments=comments)
 
 @app.route('/post-creation')
 def create():
@@ -125,6 +126,26 @@ def create_post():
             db.session.add(new_post)
             db.session.commit()
             return jsonify({'answer': True,'message': 'Пост успешно создан'})
+        except Exception as err:
+            db.session.rollback()
+            return jsonify({'answer': False,'message': 'Возникла ошибка'}) 
+
+@app.route('/comment', methods=['POST'])
+def comment():
+    if session.get('user'):
+        page = request.form['post']
+        comment = request.form['comment']
+
+        if not page.strip():
+            return jsonify({'answer': False,'message': 'Возникла ошибка'}) 
+        elif not comment.strip():
+            return jsonify({'answer': False,'message': 'Напишите текст'}) 
+        
+        new_comment = ForumComments(user_id=session['user'], text=comment, post_id=page)
+        try:
+            db.session.add(new_comment)
+            db.session.commit()
+            return jsonify({'answer': True,'message': 'Комментарий опубликован'})
         except Exception as err:
             db.session.rollback()
             return jsonify({'answer': False,'message': 'Возникла ошибка'}) 

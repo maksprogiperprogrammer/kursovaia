@@ -18,13 +18,24 @@
     </div>
     <div class="post-comments">
         {% if session['user'] %}
-            <form action="">
-                <textarea name="" id=""></textarea>
-                <button>Отпубликовать</button>
+            <form id="comment-form">
+                <input type="number" name="post" value="{{post.id}}" class="hidden">
+                <p id="comment-message" class="comment-form-message"></p>
+                <textarea name="comment" required></textarea>
+                <button type="submit">Отпубликовать</button>
             </form>
+            <script src="../static/scripts/post.js"></script>
         {% endif %}
-        <div>
-            <p>комментарии</p>
+        <div class="comments">
+            {% for comment in comments %}
+            <div class="comments-comment">
+                <div class="comments-comment-title">
+                    <p>{{comment.user.username}}</p>
+                    <p>{{comment.created_at.strftime('%Y-%m-%d %H:%M')}}</p>
+                </div>
+                <p class="comments-comment-text">{{comment.text}}</p>
+            </div>
+            {% endfor %}
         </div>
 </div>
 {% endblock %}
