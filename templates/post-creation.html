@@ -1,6 +1,7 @@
 {% extends 'main.html' %}
 {% block main %}
 <link rel="stylesheet" href="{{url_for('static', filename='css/post-creation.css')}}">
+{% if session['user'] %}
 <section class="post-creation">
     <h3>Создать пост</h3>
     <form class="post-form" action="#" method="post">
@@ -8,12 +9,18 @@
             <label for="post-section">Раздел:</label>
             <select id="post-section" name="post-section" required>
                 <option value="">Выберите раздел</option>
+                {% for section in sections %}
+                    <option value="{{section.id}}">{{section.section}}</option>
+                {% endfor %}
             </select>
         </div>
         <div class="form-group">
             <label for="post-category">Категория:</label>
             <select id="post-category" name="post-category" required>
-                <option value="">Выберите категорию</option>
+                <option value="" data-section-id="">Выберите категорию</option>
+                {% for category in category %}
+                    <option value="{{category.id}}" data-section-id="{{category.section_id}}" class="category hidden">{{category.category}}</option>
+                {% endfor %}
             </select>
         </div>
         <div class="form-group">
@@ -31,4 +38,10 @@
         <button type="submit" class="submit-button">Создать пост</button>
     </form>
 </section>
+<script src="../static/scripts/create.js"></script>
+{% else %}
+    <div class="login">
+        <h2>Войдите в аккаунт</h2>
+    </div>
+{% endif %}
 {% endblock %}

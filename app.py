@@ -86,7 +86,7 @@ def create():
             new_category = ForumCategory(category=i, section_id=3)
             db.session.add(new_category)
         db.session.commit()
-    return render_template('post-creation.html')
+    return render_template('post-creation.html', category=category, sections=sections)
 
 
 @app.route('/reg', methods=['POST'])
