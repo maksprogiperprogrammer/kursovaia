@@ -1,0 +1,29 @@
+{% extends 'main.html' %}
+{% block main %}
+<link rel="stylesheet" href="{{url_for('static', filename='css/posts.css')}}">
+<div class="posts">
+    <div class="posts-sections">
+        <p class="section">Все</p>
+        {% for section in sections %}
+            <p class="section">{{section.section}}</p>
+        {% endfor %}
+    </div>
+    <div class="posts-categories">
+        {% for category in category %}
+            <p class="category">{{category.category}}</p>
+        {% endfor %}
+    </div>
+    <div class="posts-container">
+        {% for post in posts %}
+            <div class="post">
+                
+                <a href="" class="post-theme">{{post.theme}}</a>
+                <div>
+                    <p>{{post.user.username}}</p>
+                    <p>{{post.created_at.strftime('%Y-%m-%d %H:%M')}}</p>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

@@ -61,6 +61,12 @@ class ForumComments(db.Model):
 def main():
     return render_template('main.html')
 
+@app.route('/posts')
+def posts():
+    sections = ForumSections.query.all()
+    category = ForumCategory.query.all()
+    posts = ForumPosts.query.all()
+    return render_template('posts.html', posts=posts, category=category, sections=sections)
 
 @app.route('/post-creation')
 def create():
