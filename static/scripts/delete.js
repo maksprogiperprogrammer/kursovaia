@@ -29,7 +29,7 @@ deletePost.forEach(del => {
             if (response.ok) {
                 document.getElementById(`post-${postToDelete}`).remove(); 
             } else {
-                alert('Ошибка');
+                alert(data.answer);
             }
         })
         .catch(error => console.error('Ошибка:', error));

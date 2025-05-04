@@ -19,7 +19,7 @@
             <select id="post-category" name="post-category" required>
                 <option value="" data-section-id="">Выберите категорию</option>
                 {% for category in category %}
-                    <option value="{{category.id}}" data-section-id="{{category.section_id}}" class="category hidden">{{category.category}}</option>
+                    <option data-text="{{category.id}}" data-section-id="{{category.section_id}}" class="category hidden">{{category.category}}</option>
                 {% endfor %}
             </select>
         </div>

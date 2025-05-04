@@ -109,6 +109,21 @@ def delete_post(id):
             db.session.delete(post)
             db.session.commit()
             return jsonify({'answer': True,'message': 'Успешно удалено'}) 
+        
+@app.route('/edit_post/<int:id>', methods=['POST'])
+def edit_post(id):
+    if 'user' in session:
+        new = request.get_json()
+        new_theme = new.get('theme')
+        new_text = new.get('text')
+        post = ForumPosts.query.filter_by(id=id).first()
+        if not post:
+            return jsonify({'answer': False,'message': 'Нет такого поста'}) 
+        if post.user_id == session['user']:
+            post.theme = new_theme
+            post.text = new_text
+            db.session.commit()
+            return jsonify({'answer': True}) 
 
 @app.route('/posts')
 def posts():
