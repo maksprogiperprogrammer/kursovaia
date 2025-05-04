@@ -124,6 +124,19 @@ def edit_post(id):
             post.text = new_text
             db.session.commit()
             return jsonify({'answer': True}) 
+        
+@app.route('/edit_comment/<int:id>', methods=['POST'])
+def edit_comment(id):
+    if 'user' in session:
+        new = request.get_json()
+        new_text = new.get('text')
+        comment = ForumComments.query.filter_by(id=id).first()
+        if not comment:
+            return jsonify({'answer': False,'message': 'Нет такого комментария'}) 
+        if comment.user_id == session['user']:
+            comment.text = new_text
+            db.session.commit()
+            return jsonify({'answer': True}) 
 
 @app.route('/posts')
 def posts():

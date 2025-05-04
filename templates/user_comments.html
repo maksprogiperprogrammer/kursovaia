@@ -8,12 +8,12 @@
         {% for comment in comments %}
         <div class="commentsposts-container-post" id="comment-{{comment.id}}">
             <div class="commentsposts-container-post-edit">
-                <img src="../static/img/Edit.svg" alt="" class="edit-comment">
+                <img src="../static/img/Edit.svg" alt="" class="edit-comment" id="comment-{{comment.id}}" data-comment-id="{{comment.id}}">
                 <img src="../static/img/Close.svg" alt="" class="delete-comment" data-comment-id="{{comment.id}}">
             </div>
             <a href="{{url_for('post', post=comment.post_id)}}">Пост: {{comment.post.theme}}</a>
-            <p>{{comment.text | truncate(100, True, '...')}}</p>
-            <p>{{comment.created_at.strftime('%Y-%m-%d %H:%M')}}</p>  
+            <p class="comment-text" data-text="{{comment.text}}">{{comment.text | truncate(100, True, '...')}}</p>
+            <p class="comment-created">{{comment.created_at.strftime('%Y-%m-%d %H:%M')}}</p>  
         </div>
         {% endfor %}
     </div>

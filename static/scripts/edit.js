@@ -74,3 +74,68 @@ postsEditButtons.forEach(button => {
         }
     });
 });
+
+const commentEditButtons = document.querySelectorAll('.edit-comment');
+
+commentEditButtons.forEach(button => {
+    button.addEventListener('click', function() {
+        console.log('dadaasd')
+        const commentId = button.getAttribute('data-comment-id');
+        const commentElement = document.getElementById(`comment-${commentId}`);
+
+        if (commentElement) {
+            const text = commentElement.querySelector('.comment-text');
+            const date = commentElement.querySelector('.comment-created');
+            date.classList.add('hidden');
+            
+            const originalText = text.dataset.text;
+        
+            const textTextarea = document.createElement('textarea');
+            textTextarea.value = originalText;
+            textTextarea.rows = 5;
+            textTextarea.classList.add('edit-text-textarea'); 
+
+            text.replaceWith(textTextarea);
+            
+            const saveButton = document.createElement('button');
+            saveButton.textContent = 'Сохранить';
+            saveButton.classList.add('save-button');
+            const cancelButton = document.createElement('button');
+            cancelButton.textContent = 'Отмена';
+            cancelButton.classList.add('cancel-button'); 
+            commentElement.appendChild(saveButton);
+            commentElement.appendChild(cancelButton);
+            
+            saveButton.addEventListener('click', function() {
+                const newText = textTextarea.value;
+                fetch(`/edit_comment/${commentId}`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({text: newText })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.answer) {
+                        date.classList.remove('hidden');
+                        text.textContent = newText;
+                        text.dataset.text = newText;
+
+                        textTextarea.replaceWith(text);
+                        saveButton.remove();
+                        cancelButton.remove();
+                    } else {
+                        alert(data.message);
+                    }
+                })
+            });
+            
+            cancelButton.addEventListener('click', function() {
+                date.classList.remove('hidden');
+                text.textContent = originalText;
+                textTextarea.replaceWith(text);
+                saveButton.remove();
+                cancelButton.remove();
+            });
+        }
+    });
+});
