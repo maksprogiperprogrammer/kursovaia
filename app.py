@@ -98,6 +98,17 @@ def delete_comment(id):
             db.session.delete(comment)
             db.session.commit()
             return jsonify({'answer': True,'message': 'Успешно удалено'}) 
+        
+@app.route('/delete_post/<int:id>', methods=['DELETE'])
+def delete_post(id):
+    if 'user' in session:
+        post = ForumPosts.query.filter_by(id=id).first()
+        if not post:
+            return jsonify({'answer': False,'message': 'Нет такого поста'}) 
+        if post.user_id == session['user']:
+            db.session.delete(post)
+            db.session.commit()
+            return jsonify({'answer': True,'message': 'Успешно удалено'}) 
 
 @app.route('/posts')
 def posts():

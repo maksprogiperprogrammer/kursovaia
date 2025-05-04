@@ -20,10 +20,10 @@
         <p>Ваши последние посты:</p>
         <div class="commentsposts-container">
             {% for post in posts %}
-            <div class="commentsposts-container-post">
+            <div class="commentsposts-container-post" id="post-{{post.id}}">
                 <div class="commentsposts-container-post-edit">
                     <img src="../static/img/Edit.svg" alt="" class="edit-post">
-                    <img src="../static/img/Close.svg" alt="" class="delete-post">
+                    <img src="../static/img/Close.svg" alt="" class="delete-post" data-post-id="{{post.id}}">
                 </div>
                 <a href="{{url_for('post', post=post.id)}}">{{post.theme}}</a>
                 <p>{{post.text | truncate(150, True, '...')}}</p>
