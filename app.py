@@ -81,6 +81,13 @@ def user_posts():
         return render_template('user_posts.html', posts=user_posts)
     return render_template('profile.html')
 
+@app.route('/user_comments')
+def user_comments():
+    if 'user' in session:
+        user_comments = ForumComments.query.filter_by(user_id=session['user']).order_by(ForumComments.created_at.desc()).all()
+        return render_template('user_comments.html', comments=user_comments)
+    return render_template('profile.html')
+
 @app.route('/posts')
 def posts():
     sections = ForumSections.query.all()
