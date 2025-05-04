@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block main %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/user_posts.css') }}">
+{% if session['user'] %}
+<div class="profile-posts">
+    <p>Ваши посты:</p>
+    <div class="profile-posts-container">
+        {% for post in posts %}
+        <div class="profile-posts-container-post">
+            <div class="profile-posts-container-post-edit">
+                <img src="../static/img/Edit.svg" alt="">
+                <img src="../static/img/Close.svg" alt="">
+            </div>
+            <a href="{{url_for('post', post=post.id)}}">{{post.theme}}</a>
+            <p>{{post.text | truncate(150, True, '...')}}</p>
+            <p>{{post.created_at.strftime('%Y-%m-%d %H:%M')}}</p>  
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% else %}
+    <div class="login">
+        <h2>Войдите в аккаунт</h2>
+    </div>
+{% endif %}
+{% endblock %}

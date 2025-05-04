@@ -26,15 +26,15 @@
                     <img src="../static/img/Close.svg" alt="">
                 </div>
                 <a href="{{url_for('post', post=post.id)}}">{{post.theme}}</a>
-                <p>{{post.text | truncate(100, True, '...')}}</p>
+                <p>{{post.text | truncate(150, True, '...')}}</p>
                 <p>{{post.created_at.strftime('%Y-%m-%d %H:%M')}}</p>  
             </div>
             {% endfor %}
         </div>
-        <button><a href="">Все посты</a></button>
+        <button><a href="{{url_for('user_posts')}}">Все посты</a></button>
     </div>
     <div  class="profile-posts">
-        <p>Ваши комментарии:</p>
+        <p>Ваши последние комментарии:</p>
         <div class="profile-posts-container">
             {% for comment in comments %}
             <div class="profile-posts-container-post">
