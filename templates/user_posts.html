@@ -1,15 +1,15 @@
 {% extends 'base.html' %}
 {% block main %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/user_posts.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
 {% if session['user'] %}
-<div class="profile-posts">
+<div class="commentsposts">
     <p>Ваши посты:</p>
-    <div class="profile-posts-container">
+    <div class="commentsposts-container">
         {% for post in posts %}
-        <div class="profile-posts-container-post">
-            <div class="profile-posts-container-post-edit">
-                <img src="../static/img/Edit.svg" alt="">
-                <img src="../static/img/Close.svg" alt="">
+        <div class="commentsposts-container-post">
+            <div class="commentsposts-container-post-edit">
+                <img src="../static/img/Edit.svg" alt="" class="edit-post">
+                <img src="../static/img/Close.svg" alt="" class="delete-post">
             </div>
             <a href="{{url_for('post', post=post.id)}}">{{post.theme}}</a>
             <p>{{post.text | truncate(150, True, '...')}}</p>

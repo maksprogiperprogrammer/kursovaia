@@ -88,6 +88,17 @@ def user_comments():
         return render_template('user_comments.html', comments=user_comments)
     return render_template('profile.html')
 
+@app.route('/delete_comment/<int:id>', methods=['DELETE'])
+def delete_comment(id):
+    if 'user' in session:
+        comment = ForumComments.query.filter_by(id=id).first()
+        if not comment:
+            return jsonify({'answer': False,'message': 'Нет такого комментария'}) 
+        if comment.user_id == session['user']:
+            db.session.delete(comment)
+            db.session.commit()
+            return jsonify({'answer': True,'message': 'Успешно удалено'}) 
+
 @app.route('/posts')
 def posts():
     sections = ForumSections.query.all()

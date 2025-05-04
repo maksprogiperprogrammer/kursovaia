@@ -16,14 +16,14 @@
             <p>Всего комментариев: {{c_total}}</p>
         </div>
     </div>
-    <div class="profile-posts">
+    <div class="commentsposts">
         <p>Ваши последние посты:</p>
-        <div class="profile-posts-container">
+        <div class="commentsposts-container">
             {% for post in posts %}
-            <div class="profile-posts-container-post">
-                <div class="profile-posts-container-post-edit">
-                    <img src="../static/img/Edit.svg" alt="">
-                    <img src="../static/img/Close.svg" alt="">
+            <div class="commentsposts-container-post">
+                <div class="commentsposts-container-post-edit">
+                    <img src="../static/img/Edit.svg" alt="" class="edit-post">
+                    <img src="../static/img/Close.svg" alt="" class="delete-post">
                 </div>
                 <a href="{{url_for('post', post=post.id)}}">{{post.theme}}</a>
                 <p>{{post.text | truncate(150, True, '...')}}</p>
@@ -33,14 +33,14 @@
         </div>
         <button><a href="{{url_for('user_posts')}}">Все посты</a></button>
     </div>
-    <div  class="profile-posts">
+    <div  class="commentsposts">
         <p>Ваши последние комментарии:</p>
-        <div class="profile-posts-container">
+        <div class="commentsposts-container">
             {% for comment in comments %}
-            <div class="profile-posts-container-post">
-                <div class="profile-posts-container-post-edit">
-                    <img src="../static/img/Edit.svg" alt="">
-                    <img src="../static/img/Close.svg" alt="">
+            <div class="commentsposts-container-post" id="comment-{{comment.id}}">
+                <div class="commentsposts-container-post-edit">
+                    <img src="../static/img/Edit.svg" alt="" class="edit-comment">
+                    <img src="../static/img/Close.svg" alt="" class="delete-comment" data-comment-id="{{comment.id}}">
                 </div>
                 <a href="{{url_for('post', post=comment.post_id)}}">Пост: {{comment.post.theme}}</a>
                 <p>{{comment.text | truncate(100, True, '...')}}</p>
@@ -51,6 +51,7 @@
         <button><a href="{{url_for('user_comments')}}">Все комментарии</a></button>
     </div>
 </div>
+<script src="../static/scripts/delete.js"></script>
 {% else %}
     <div class="login">
         <h2>Войдите в аккаунт</h2>
