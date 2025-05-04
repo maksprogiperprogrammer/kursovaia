@@ -62,6 +62,18 @@ def main():
     new_posts = ForumPosts.query.order_by(ForumPosts.created_at.desc()).limit(5).all()
     return render_template('main.html', new_posts = new_posts)
 
+@app.route('/profile')
+def profile():
+    if 'user' in session:
+        user = Users.query.filter_by(id=session['user']).first()
+        user_posts =  ForumPosts.query.filter_by(user_id=session['user']).order_by(ForumPosts.created_at.desc()).limit(5).all()
+        user_comments = ForumComments.query.filter_by(user_id=session['user']).order_by(ForumComments.created_at.desc()).limit(5).all()
+        c_total = ForumComments.query.filter_by(user_id=session['user']).count()
+        p_total = ForumPosts.query.filter_by(user_id=session['user']).count()
+        return render_template('profile.html', user = user, posts=user_posts, 
+                               comments=user_comments, c_total=c_total,p_total=p_total)
+    return render_template('profile.html')
+
 @app.route('/posts')
 def posts():
     sections = ForumSections.query.all()

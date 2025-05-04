@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block main %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
+{% if session['user'] %}
+<div class="profile">
+    <div class="profile-container">
+        <div class="profile-person">
+            <div class="profile-person-img">
+                <img src="{{user.photo if user.photo else '../static/img/person.svg'}}" alt="" style="cursor: pointer;">
+                <input type="file" accept="image/*" id="phot-input">
+            </div>
+            <p>{{user.username}}</p>
+        </div>
+        <div class="profile-data">
+            <p>Всего постов: {{p_total}}</p>
+            <p>Всего комментариев: {{c_total}}</p>
+        </div>
+    </div>
+    <div class="profile-posts">
+        <p>Ваши последние посты:</p>
+        <div class="profile-posts-container">
+            {% for post in posts %}
+            <div class="profile-posts-container-post">
+                <div class="profile-posts-container-post-edit">
+                    <img src="../static/img/Edit.svg" alt="">
+                    <img src="../static/img/Close.svg" alt="">
+                </div>
+                <a href="{{url_for('post', post=post.id)}}">{{post.theme}}</a>
+                <p>{{post.text | truncate(100, True, '...')}}</p>
+                <p>{{post.created_at.strftime('%Y-%m-%d %H:%M')}}</p>  
+            </div>
+            {% endfor %}
+        </div>
+        <button><a href="">Все посты</a></button>
+    </div>
+    <div  class="profile-posts">
+        <p>Ваши комментарии:</p>
+        <div class="profile-posts-container">
+            {% for comment in comments %}
+            <div class="profile-posts-container-post">
+                <div class="profile-posts-container-post-edit">
+                    <img src="../static/img/Edit.svg" alt="">
+                    <img src="../static/img/Close.svg" alt="">
+                </div>
+                <a href="{{url_for('post', post=comment.post_id)}}">Пост: {{comment.post.theme}}</a>
+                <p>{{comment.text | truncate(100, True, '...')}}</p>
+                <p>{{comment.created_at.strftime('%Y-%m-%d %H:%M')}}</p>  
+            </div>
+            {% endfor %}
+        </div>
+        <button><a href="">Все комментарии</a></button>
+    </div>
+</div>
+{% else %}
+    <div class="login">
+        <h2>Войдите в аккаунт</h2>
+    </div>
+{% endif %}
+{% endblock %}
