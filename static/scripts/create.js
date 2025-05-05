@@ -4,7 +4,9 @@ const categories = document.querySelectorAll('.category');
 
 postSection.addEventListener('change', function(){
     let choosenSection = postSection.value;
+    let choosenCategory = postCategory.value;
     console.log(choosenSection);
+    console.log(choosenCategory);
     postCategory.value = ""
     categories.forEach(category=>{
         let categorySectionId = category.getAttribute('data-section-id');

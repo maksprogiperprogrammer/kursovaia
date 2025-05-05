@@ -61,7 +61,11 @@ class ForumComments(db.Model):
 @app.route('/')
 def main():
     new_posts = ForumPosts.query.order_by(ForumPosts.created_at.desc()).limit(5).all()
-    return render_template('main.html', new_posts = new_posts)
+    if 'user' in session:
+        access = (Users.query.filter_by(id=session['user']).first()).access
+        return render_template('main.html', new_posts = new_posts, access=access)
+    else:
+        return render_template('main.html', new_posts = new_posts)
 
 @app.route('/profile')
 def profile():
@@ -144,7 +148,11 @@ def posts():
     sections = ForumSections.query.all()
     category = ForumCategory.query.all()
     posts = ForumPosts.query.all()
-    return render_template('posts.html', posts=posts, category=category, sections=sections)
+    if 'user' in session:
+        access = (Users.query.filter_by(id=session['user']).first()).access
+        return render_template('posts.html', posts=posts, category=category, sections=sections, access=access)
+    else:
+        return render_template('posts.html', posts=posts, category=category, sections=sections)
 
 @app.route('/post/<int:post>', methods=['GET','POST'])
 def post(post):
@@ -153,7 +161,11 @@ def post(post):
     category = ForumCategory.query.all()
     posts = ForumPosts.query.all()
     post = ForumPosts.query.get_or_404(post)
-    return render_template('post.html', post=post, posts=posts, category=category, sections=sections, comments=comments)
+    if 'user' in session:
+        access = (Users.query.filter_by(id=session['user']).first()).access
+        return render_template('post.html', post=post, posts=posts, category=category, sections=sections, comments=comments, access=access)
+    else:
+        return render_template('post.html', post=post, posts=posts, category=category, sections=sections, comments=comments)
 
 @app.route('/post-creation')
 def create():

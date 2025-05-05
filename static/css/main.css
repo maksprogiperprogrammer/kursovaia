@@ -20,6 +20,7 @@
   flex-direction: column;
   flex-wrap: wrap;
   margin: 10px 0;
+  position: relative;
 }
 .container .post .post-theme {
   flex: 1;
@@ -27,6 +28,20 @@
   font-size: 24px;
   font-weight: bolder;
   margin: 10px 0;
+}
+.container .post .commentsposts-container-post-edit {
+  position: absolute;
+  right: -10px;
+  top: -10px;
+}
+.container .post .commentsposts-container-post-edit img {
+  width: 20px;
+  margin: 15px 15px;
+  transition: 0.2s ease;
+}
+.container .post .commentsposts-container-post-edit img:hover {
+  cursor: pointer;
+  filter: invert(40%);
 }
 .container .post div {
   display: flex;

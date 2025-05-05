@@ -30,7 +30,7 @@
                 <button>Зарегистрироваться</button>
             </form>
             {% else %}
-                <button><a href="logout">Выйти</a></button>
+                <button><a href="{{url_for('logout')}}">Выйти</a></button>
             {% endif %}
         </div>
     </header>

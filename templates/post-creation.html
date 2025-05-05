@@ -19,7 +19,7 @@
             <select id="post-category" name="post-category" required>
                 <option value="" data-section-id="">Выберите категорию</option>
                 {% for category in category %}
-                    <option data-text="{{category.id}}" data-section-id="{{category.section_id}}" class="category hidden">{{category.category}}</option>
+                    <option data-text="{{category.id}}"  value="{{category.id}}" data-section-id="{{category.section_id}}" class="category hidden">{{category.category}}</option>
                 {% endfor %}
             </select>
         </div>
@@ -30,10 +30,6 @@
         <div class="form-group">
             <label for="post-content">Содержимое поста:</label>
             <textarea id="post-content" name="post-content" rows="5" placeholder="Введите текст поста" required></textarea>
-        </div>
-        <div class="form-group">
-            <label for="post-image">Загрузить изображение:</label>
-            <input type="file" id="post-image" name="post-image" accept="image/*">
         </div>
         <h2 id="create-message"></h2>
         <button type="submit" class="submit-button">Создать пост</button>
