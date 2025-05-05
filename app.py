@@ -46,6 +46,7 @@ class ForumPosts(db.Model):
     user = db.relationship("Users", backref="posts")
     sections = db.relationship("ForumSections")
     categories = db.relationship("ForumCategory")
+    all_comments = db.relationship("ForumComments", backref="forum_post", cascade="all, delete-orphan")
 
 class ForumComments(db.Model):
     __tablename__ = 'forum_comments'
@@ -94,7 +95,7 @@ def delete_comment(id):
         comment = ForumComments.query.filter_by(id=id).first()
         if not comment:
             return jsonify({'answer': False,'message': 'Нет такого комментария'}) 
-        if comment.user_id == session['user']:
+        if comment.user_id == session['user'] or (Users.query.filter_by(id=session['user']).first()).access =='admin':
             db.session.delete(comment)
             db.session.commit()
             return jsonify({'answer': True,'message': 'Успешно удалено'}) 
@@ -105,7 +106,7 @@ def delete_post(id):
         post = ForumPosts.query.filter_by(id=id).first()
         if not post:
             return jsonify({'answer': False,'message': 'Нет такого поста'}) 
-        if post.user_id == session['user']:
+        if post.user_id == session['user'] or (Users.query.filter_by(id=session['user']).first()).access =='admin':
             db.session.delete(post)
             db.session.commit()
             return jsonify({'answer': True,'message': 'Успешно удалено'}) 
@@ -147,7 +148,7 @@ def posts():
 
 @app.route('/post/<int:post>', methods=['GET','POST'])
 def post(post):
-    comments = ForumComments.query.filter_by(post_id=post).all()
+    comments = ForumComments.query.filter_by(post_id=post).order_by(ForumComments.created_at.desc()).all()
     sections = ForumSections.query.all()
     category = ForumCategory.query.all()
     posts = ForumPosts.query.all()
@@ -156,33 +157,35 @@ def post(post):
 
 @app.route('/post-creation')
 def create():
-    sections = ForumSections.query.all()
-    if not sections:
-        sections = ('Электроника', "Игры", "Общение")
-        for i in sections:
-            new_section = ForumSections(section=i)
-            db.session.add(new_section)
-        db.session.commit()
-    category = ForumCategory.query.all()
-    if not category:
-        category1 = ('Микроволновки', "Ноутбуки", "Пылесосы")
-        category2 = ('Экшен', "Стратегии", "2Д")
-        category3 = ('Еда', "Спорт", "Новости")
-        for i in category1:
-            new_category = ForumCategory(category=i, section_id=1)
-            db.session.add(new_category)
-        for i in category2:
-            new_category = ForumCategory(category=i, section_id=2)
-            db.session.add(new_category)
-        for i in category3:
-            new_category = ForumCategory(category=i, section_id=3)
-            db.session.add(new_category)
-        db.session.commit()
-    return render_template('post-creation.html', category=category, sections=sections)
+    if 'user' in session:
+        sections = ForumSections.query.all()
+        if not sections:
+            sections = ('Электроника', "Игры", "Общение")
+            for i in sections:
+                new_section = ForumSections(section=i)
+                db.session.add(new_section)
+            db.session.commit()
+        category = ForumCategory.query.all()
+        if not category:
+            category1 = ('Микроволновки', "Ноутбуки", "Пылесосы")
+            category2 = ('Экшен', "Стратегии", "2Д")
+            category3 = ('Еда', "Спорт", "Новости")
+            for i in category1:
+                new_category = ForumCategory(category=i, section_id=1)
+                db.session.add(new_category)
+            for i in category2:
+                new_category = ForumCategory(category=i, section_id=2)
+                db.session.add(new_category)
+            for i in category3:
+                new_category = ForumCategory(category=i, section_id=3)
+                db.session.add(new_category)
+            db.session.commit()
+        return render_template('post-creation.html', category=category, sections=sections)
+    return render_template('post-creation.html')
 
 @app.route('/create', methods=['POST'])
 def create_post():
-    if session.get('user'):
+    if 'user' in session:
         section = request.form['post-section']
         category = request.form['post-category']
         theme = request.form['post-title']
@@ -209,7 +212,7 @@ def create_post():
 
 @app.route('/comment', methods=['POST'])
 def comment():
-    if session.get('user'):
+    if 'user' in session:
         page = request.form['post']
         comment = request.form['comment']
 

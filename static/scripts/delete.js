@@ -3,7 +3,7 @@ const deleteComment = document.querySelectorAll('.delete-comment');
 deleteComment.forEach(del => {
     del.addEventListener('click', function(){
         commentToDelete = del.getAttribute('data-comment-id');
-        fetch(`delete_comment/${commentToDelete}`, {
+        fetch(`/delete_comment/${commentToDelete}`, {
             method: 'DELETE'
         })
         .then(response => {
@@ -22,7 +22,7 @@ const deletePost = document.querySelectorAll('.delete-post');
 deletePost.forEach(del => {
     del.addEventListener('click', function(){
         postToDelete = del.getAttribute('data-post-id');
-        fetch(`delete_post/${postToDelete}`, {
+        fetch(`/delete_post/${postToDelete}`, {
             method: 'DELETE'
         })
         .then(response => {
