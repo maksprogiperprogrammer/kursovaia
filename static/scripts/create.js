@@ -36,3 +36,53 @@ postForm.addEventListener('submit', function(event){
         }
     })
 })
+
+const adminBtn = document.querySelector('.admin-button');
+let isOpen = false;
+adminBtn.addEventListener('click', function(){
+    if (isOpen){
+        isOpen=false;
+        document.querySelector('.admin-div').style.maxHeight='0';
+    } else {
+        isOpen=true;
+        document.querySelector('.admin-div').style.maxHeight='240px';
+    }
+})
+
+const formCreateSection = document.getElementById('form-create-section');
+const formCreateCategory = document.getElementById('form-create-category');
+
+formCreateSection.addEventListener('submit', function(event){
+    event.preventDefault()
+    const newData = new FormData(this)
+    fetch('/create-section', {
+        method: 'POST',
+        body: newData
+    })
+    .then(response=>response.json())
+    .then(data=>{
+        if(data.answer){
+            document.querySelector('.admin-p').textContent = data.message;
+            formCreateSection.reset()
+        } else {
+            document.querySelector('.admin-p').textContent = data.message;
+        }
+    })
+})
+formCreateCategory.addEventListener('submit', function(event){
+    event.preventDefault()
+    const newData = new FormData(this)
+    fetch('/create-category', {
+        method: 'POST',
+        body: newData
+    })
+    .then(response=>response.json())
+    .then(data=>{
+        if(data.answer){
+            document.querySelector('.admin-p').textContent = data.message;
+            formCreateCategory.reset()
+        } else {
+            document.querySelector('.admin-p').textContent = data.message;
+        }
+    })
+})

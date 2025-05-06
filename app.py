@@ -91,27 +91,39 @@ def main():
 @app.route('/profile')
 def profile():
     if 'user' in session:
+        try:
+            access = (Users.query.filter_by(id=session['user']).first()).access
+        except:
+            return redirect(url_for('logout'))
         user = Users.query.filter_by(id=session['user']).first()
         user_posts =  ForumPosts.query.filter_by(user_id=session['user']).order_by(ForumPosts.created_at.desc()).limit(5).all()
         user_comments = ForumComments.query.filter_by(user_id=session['user']).order_by(ForumComments.created_at.desc()).limit(5).all()
         c_total = ForumComments.query.filter_by(user_id=session['user']).count()
         p_total = ForumPosts.query.filter_by(user_id=session['user']).count()
         return render_template('profile.html', user = user, posts=user_posts, 
-                               comments=user_comments, c_total=c_total,p_total=p_total)
+                               comments=user_comments, c_total=c_total,p_total=p_total, access=access)
     return render_template('profile.html')
 
 @app.route('/user_posts')
 def user_posts():
     if 'user' in session:
+        try:
+            access = (Users.query.filter_by(id=session['user']).first()).access
+        except:
+            return redirect(url_for('logout'))
         user_posts =  ForumPosts.query.filter_by(user_id=session['user']).order_by(ForumPosts.created_at.desc()).all()
-        return render_template('user_posts.html', posts=user_posts)
+        return render_template('user_posts.html', posts=user_posts, access=access)
     return render_template('profile.html')
 
 @app.route('/user_comments')
 def user_comments():
     if 'user' in session:
+        try:
+            access = (Users.query.filter_by(id=session['user']).first()).access
+        except:
+            return redirect(url_for('logout'))
         user_comments = ForumComments.query.filter_by(user_id=session['user']).order_by(ForumComments.created_at.desc()).all()
-        return render_template('user_comments.html', comments=user_comments)
+        return render_template('user_comments.html', comments=user_comments, access=access)
     return render_template('profile.html')
 
 @app.route('/ban_user/<int:user_id>', methods=['DELETE'])
@@ -176,6 +188,39 @@ def edit_comment(id):
             comment.text = new_text
             db.session.commit()
             return jsonify({'answer': True}) 
+        
+
+@app.route('/create-section', methods=['POST'])
+def create_section():
+    if 'user' in session and (Users.query.filter_by(id=session['user']).first()).access =='admin':
+        section = request.form['create-section']
+        if not section:
+            return jsonify({'answer': False,'message': 'Впишите название секции'}) 
+        new_section = ForumSections(section=section)
+        try:
+            db.session.add(new_section)
+            db.session.commit()
+            return jsonify({'answer': True,'message': 'Успешно'})
+        except:
+             return jsonify({'answer': False,'message': 'Возникла ошибка'})
+
+@app.route('/create-category', methods=['POST'])
+def create_category():
+    if 'user' in session and (Users.query.filter_by(id=session['user']).first()).access =='admin':
+        category = request.form['create-category']
+        section = request.form['create-category-section']
+        if not category:
+            return jsonify({'answer': False,'message': 'Впишите название категории'}) 
+        if not section:
+            return jsonify({'answer': False,'message': 'Выберите секцию'}) 
+        new_category = ForumCategory(category=category, section_id=section)
+        try:
+            db.session.add(new_category)
+            db.session.commit()
+            return jsonify({'answer': True,'message': 'Успешно'})
+        except:
+             return jsonify({'answer': False,'message': 'Возникла ошибка'})
+
 
 @app.route('/posts')
 def posts():
@@ -210,6 +255,10 @@ def post(post):
 @app.route('/post-creation')
 def create():
     if 'user' in session:
+        try:
+            access = (Users.query.filter_by(id=session['user']).first()).access
+        except:
+            return redirect(url_for('logout'))
         sections = ForumSections.query.all()
         if not sections:
             sections = ('Электроника', "Игры", "Общение")
@@ -232,7 +281,7 @@ def create():
                 new_category = ForumCategory(category=i, section_id=3)
                 db.session.add(new_category)
             db.session.commit()
-        return render_template('post-creation.html', category=category, sections=sections)
+        return render_template('post-creation.html', category=category, sections=sections, access=access)
     return render_template('post-creation.html')
 
 @app.route('/create', methods=['POST'])

@@ -3,6 +3,28 @@
 <link rel="stylesheet" href="{{url_for('static', filename='css/post-creation.css')}}">
 {% if session['user'] %}
 <section class="post-creation">
+    {% if access == 'admin' %}
+    <div class="admin">
+        <button class="admin-button">Добавить раздел/категорию</button>
+        <div class="admin-div">
+            <p class="admin-p"></p>
+            <form id="form-create-section">
+                <input type="text" name="create-section" placeholder="раздел" id="create-section">
+                <button>Добавить раздел</button>
+            </form>
+            <form id="form-create-category">
+                <input type="text" name="create-category" placeholder="категория" id="create-category">
+                <select id="create-category-section" name="create-category-section" required>
+                    <option value="">К какому разделу относится</option>
+                    {% for section in sections %}
+                        <option value="{{section.id}}">{{section.section}}</option>
+                    {% endfor %}
+                </select>
+                <button>Добавить категорию</button>
+            </form>
+        </div>
+    </div>
+    {% endif %}
     <h3>Создать пост</h3>
     <form class="post-form" action="#" method="post">
         <div class="form-group">
