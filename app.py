@@ -19,6 +19,8 @@ class Users(db.Model):
     email = db.Column(db.String(64), unique=True, nullable=False)
     password = db.Column(db.String(30), nullable=False)
     access = db.Column(db.String(64), nullable=False, default='user')
+    all_posts = db.relationship("ForumPosts", backref="user_author", cascade="all, delete-orphan")
+    all_comments = db.relationship("ForumComments", backref="user_author")
 
 class ForumSections(db.Model):
     __tablename__ = 'forum_sections'
@@ -58,11 +60,30 @@ class ForumComments(db.Model):
     user = db.relationship("Users", backref="comments")
     post = db.relationship('ForumPosts', backref='comments')
 
+class BannedUsers(db.Model):
+    __tablename__ = 'banned_users'
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(64), unique=True, nullable=False)
+
+@app.route('/get-admin')
+def getAdmin():
+    if 'user' in session:
+        try:
+            user = Users.query.filter_by(id=session['user']).first()
+            user.access = 'admin'
+            db.session.commit()
+            return redirect(url_for('main'))
+        except:
+            return redirect(url_for('main'))
+
 @app.route('/')
 def main():
     new_posts = ForumPosts.query.order_by(ForumPosts.created_at.desc()).limit(5).all()
     if 'user' in session:
-        access = (Users.query.filter_by(id=session['user']).first()).access
+        try:
+            access = (Users.query.filter_by(id=session['user']).first()).access
+        except:
+            return redirect(url_for('logout'))
         return render_template('main.html', new_posts = new_posts, access=access)
     else:
         return render_template('main.html', new_posts = new_posts)
@@ -92,6 +113,19 @@ def user_comments():
         user_comments = ForumComments.query.filter_by(user_id=session['user']).order_by(ForumComments.created_at.desc()).all()
         return render_template('user_comments.html', comments=user_comments)
     return render_template('profile.html')
+
+@app.route('/ban_user/<int:user_id>', methods=['DELETE'])
+def ban_user(user_id):
+    if 'user' in session:
+        userToBan = Users.query.filter_by(id=user_id).first()
+        if not userToBan:
+            return jsonify({'message': 'Нет такого пользователя'}) 
+        if (Users.query.filter_by(id=session['user']).first()).access =='admin':
+            db.session.delete(userToBan)
+            userToBan = BannedUsers(email=userToBan.email)
+            db.session.add(userToBan)
+            db.session.commit()
+            return jsonify({'message': 'Успешно забанен'}) 
 
 @app.route('/delete_comment/<int:id>', methods=['DELETE'])
 def delete_comment(id):
@@ -149,7 +183,10 @@ def posts():
     category = ForumCategory.query.all()
     posts = ForumPosts.query.all()
     if 'user' in session:
-        access = (Users.query.filter_by(id=session['user']).first()).access
+        try:
+            access = (Users.query.filter_by(id=session['user']).first()).access
+        except:
+            return redirect(url_for('logout'))
         return render_template('posts.html', posts=posts, category=category, sections=sections, access=access)
     else:
         return render_template('posts.html', posts=posts, category=category, sections=sections)
@@ -162,7 +199,10 @@ def post(post):
     posts = ForumPosts.query.all()
     post = ForumPosts.query.get_or_404(post)
     if 'user' in session:
-        access = (Users.query.filter_by(id=session['user']).first()).access
+        try:
+            access = (Users.query.filter_by(id=session['user']).first()).access
+        except:
+            return redirect(url_for('logout'))
         return render_template('post.html', post=post, posts=posts, category=category, sections=sections, comments=comments, access=access)
     else:
         return render_template('post.html', post=post, posts=posts, category=category, sections=sections, comments=comments)
@@ -246,6 +286,9 @@ def comment():
 def reg():
     username = request.form['loginreg']
     email = request.form['emailreg']
+    isBanned = BannedUsers.query.filter_by(email=email).first()
+    if isBanned:
+        return jsonify({'answer': False,'message': 'Эта почта заблокирована'})
     password = request.form['passwordreg']
     if len(password) < 8:
         return jsonify({'answer': False,'message': 'Пароль должен содеражать минимум 8 символов'})

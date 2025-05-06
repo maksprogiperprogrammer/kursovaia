@@ -35,3 +35,30 @@ deletePost.forEach(del => {
         .catch(error => console.error('Ошибка:', error));
     }) 
 });
+
+const banUser = document.querySelectorAll('.ban-button');
+
+banUser.forEach(ban => {
+    ban.addEventListener('click', function(){
+        userToBan = ban.value;
+        who = ban.getAttribute('data-user');
+        let result = confirm(`Вы уверены что хотите удалить ${who}?`)
+        if (result){
+            fetch(`/ban_user/${userToBan}`, {
+                method: 'DELETE'
+            })
+            .then(response => {
+                if (response.ok) {
+                    user = document.querySelectorAll(`.user-${userToBan}`);
+                    user.forEach(u=>{
+                        u.textContent = 'забанен'
+                    })
+                } else {
+                    alert('ошибка');
+                }
+            })
+            .catch(error => console.error('Ошибка:', error));
+        }
+    }) 
+
+});

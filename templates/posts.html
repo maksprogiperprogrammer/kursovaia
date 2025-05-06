@@ -24,7 +24,7 @@
                 <a class="post-theme" href="{{url_for('post', post=post.id)}}">{{post.theme}}</a>
                 <p class="post-text"  data-text="{{post.text}}">{{post.text | truncate(150, True, '...')}}</p>
                 <div>
-                    <p>{{post.user.username}}</p>
+                    <p class="user-{{post.user.id}}">{{post.user.username}}{% if access == 'admin' %}<button class="ban-button" value="{{post.user.id}}" data-user="{{post.user.username}}">забанить</button>{% endif %}</p>
                     <p class="post-created">{{post.created_at.strftime('%Y-%m-%d %H:%M')}}</p> 
                 </div> 
             </div>

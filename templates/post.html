@@ -38,7 +38,7 @@
                 </div>
                 {% endif %}
                 <div class="comments-comment-title">
-                    <p>{{comment.user.username}}</p>
+                    <p class="user-{{post.user.id}}">{{post.user.username}}{% if access == 'admin' %}<button class="ban-button" value="{{post.user.id}}" data-user="{{post.user.username}}">забанить</button>{% endif %}</p>
                     <p class="comment-created">{{comment.created_at.strftime('%Y-%m-%d %H:%M')}}</p>  
                 </div>
                 <p class="comment-text" data-text="{{comment.text}}">{{comment.text | truncate(100, True, '...')}}</p>

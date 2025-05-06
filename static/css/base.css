@@ -100,3 +100,20 @@ header div p {
 .hidden {
   display: none !important;
 }
+
+.ban-button {
+  margin-left: 30px;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: red;
+  color: white;
+  margin-right: 10px;
+  font-size: 18px;
+  cursor: pointer;
+  transition: 0.3s ease;
+  box-shadow: 0 1px 10px rgba(51, 51, 51, 0.5);
+}
+.ban-button:hover {
+  background-color: black;
+}
