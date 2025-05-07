@@ -52,18 +52,37 @@
 .posts .posts-container .post .post-theme {
   flex: 1;
   text-decoration: none;
-  font-size: 18px;
+  font-size: 26px;
   font-weight: bolder;
   margin: 10px 0;
+}
+.posts .posts-container .post .post-text {
+  font-size: 22px;
+  margin-top: 10px;
 }
 .posts .posts-container .post div {
   display: flex;
   justify-content: space-between;
-  font-size: 14px;
+  font-size: 22px;
 }
 .posts .posts-container .post div p {
   margin: 0;
-  margin-top: 10px;
+}
+.posts .posts-container .posts-container-created div {
+  display: flex;
+  align-items: center;
+}
+.posts .posts-container .posts-container-created div img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  overflow: hidden;
+  -o-object-fit: cover;
+     object-fit: cover;
+  margin-right: 20px;
+}
+.posts .posts-container .posts-container-created .post-created {
+  margin-right: 30px;
 }
 
 .active {

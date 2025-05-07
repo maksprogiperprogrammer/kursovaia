@@ -1,12 +1,15 @@
 from flask import Flask, render_template, request, session, jsonify, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.utils import secure_filename
 from datetime import datetime
+import os
 
 app = Flask(__name__)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///proninchan.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False  
+app.config['UPLOAD_FOLDER'] = 'static/img' 
 db = SQLAlchemy(app)
 app.secret_key = 'proniproni322'
 
@@ -15,7 +18,7 @@ class Users(db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(32), unique=True, nullable=False)
-    photo = db.Column(db.BLOB)
+    photo = db.Column(db.String(124))
     email = db.Column(db.String(64), unique=True, nullable=False)
     password = db.Column(db.String(30), nullable=False)
     access = db.Column(db.String(64), nullable=False, default='user')
@@ -103,6 +106,36 @@ def profile():
         return render_template('profile.html', user = user, posts=user_posts, 
                                comments=user_comments, c_total=c_total,p_total=p_total, access=access)
     return render_template('profile.html')
+
+@app.route('/set_photo', methods=['POST'])
+def set_photo():
+    if 'user' in session:
+        try:
+            user = Users.query.filter_by(id=session['user']).first()
+            if not user:
+                return jsonify({'answer': False, 'message': 'Пользователь не найден'})
+            if 'photo' not in request.files:
+                return jsonify({'answer': False, 'message': 'Нет файла'})
+            
+            file = request.files.get('photo')
+            if file:
+                if user.photo:
+                    old_filepath = user.photo
+                    if os.path.exists(old_filepath):
+                        os.remove(old_filepath)
+
+            if file.filename == '':
+                return jsonify({'answer': False, 'message': 'Нет выбранного файла'})
+            if file:
+                filename = secure_filename(file.filename)
+                filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+                file.save(filepath) 
+                user.photo = 'img/' + filename
+                db.session.commit()
+                return jsonify({'answer': True, 'message': 'Фотография успешно загружена'}) 
+        except:
+            db.session.rollback()
+            return jsonify({'answer': False, 'message': 'Ошибка при загрузке'})
 
 @app.route('/user_posts')
 def user_posts():

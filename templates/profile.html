@@ -5,10 +5,10 @@
 <div class="profile">
     <div class="profile-container">
         <div class="profile-person">
-            <div class="profile-person-img">
-                <img src="{{user.photo if user.photo else '../static/img/person.svg'}}" alt="" style="cursor: pointer;">
-                <input type="file" accept="image/*" id="phot-input">
-            </div>
+            <form class="profile-person-img">
+                <img src="{{ url_for('static', filename=user.photo) if user.photo else url_for('static', filename='img/person.svg') }}" alt="">
+                <input type="file" accept="image/*" id="photo-input" name="photo">
+            </form>
             <p>{{user.username}}</p>
         </div>
         <div class="profile-data">
@@ -53,6 +53,7 @@
 </div>
 <script src="../static/scripts/delete.js"></script>
 <script src="../static/scripts/edit.js"></script>
+<script src="../static/scripts/profile.js"></script>
 {% else %}
     <div class="login">
         <h2>Войдите в аккаунт</h2>

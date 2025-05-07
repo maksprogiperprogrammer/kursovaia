@@ -3,7 +3,7 @@
 <link rel="stylesheet" href="{{url_for('static', filename='css/post.css')}}">
     <div class="post-created">
         <div>
-            <img src="../static/img/person.svg" alt="" class="profile-img" />
+            <img src="{{ url_for('static', filename=post.user.photo) if post.user.photo else url_for('static', filename='img/person.svg') }}" alt="">
             <p>{{post.user.username}}</p>
         </div>
         <p>{{post.created_at.strftime('%Y-%m-%d %H:%M')}}</p>
@@ -38,7 +38,10 @@
                 </div>
                 {% endif %}
                 <div class="comments-comment-title">
-                    <p class="user-{{post.user.id}}">{{post.user.username}}{% if access == 'admin' %}<button class="ban-button" value="{{post.user.id}}" data-user="{{post.user.username}}">забанить</button>{% endif %}</p>
+                    <div>
+                        <img src="{{ url_for('static', filename=post.user.photo) if post.user.photo else url_for('static', filename='img/person.svg') }}" alt="">
+                        <p class="user-{{post.user.id}}">{{post.user.username}}{% if access == 'admin' %}<button class="ban-button" value="{{post.user.id}}" data-user="{{post.user.username}}">забанить</button>{% endif %}</p>
+                    </div>
                     <p class="comment-created">{{comment.created_at.strftime('%Y-%m-%d %H:%M')}}</p>  
                 </div>
                 <p class="comment-text" data-text="{{comment.text}}">{{comment.text | truncate(100, True, '...')}}</p>

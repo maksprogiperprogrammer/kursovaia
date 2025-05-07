@@ -21,12 +21,15 @@
                     <img src="../static/img/Close.svg" alt="" class="delete-post" data-post-id="{{post.id}}">
                 </div>
                 {% endif %}
-                <a class="post-theme" href="{{url_for('post', post=post.id)}}">{{post.theme}}</a>
-                <p class="post-text"  data-text="{{post.text}}">{{post.text | truncate(150, True, '...')}}</p>
-                <div>
-                    <p class="user-{{post.user.id}}">{{post.user.username}}{% if access == 'admin' %}<button class="ban-button" value="{{post.user.id}}" data-user="{{post.user.username}}">забанить</button>{% endif %}</p>
+                <div class="posts-container-created">
+                    <div>
+                        <img src="{{ url_for('static', filename=post.user.photo) if post.user.photo else url_for('static', filename='img/person.svg') }}" alt="">
+                        <p class="user-{{post.user.id}}">{{post.user.username}}{% if access == 'admin' %}<button class="ban-button" value="{{post.user.id}}" data-user="{{post.user.username}}">забанить</button>{% endif %}</p>
+                    </div>
                     <p class="post-created">{{post.created_at.strftime('%Y-%m-%d %H:%M')}}</p> 
                 </div> 
+                <a class="post-theme" href="{{url_for('post', post=post.id)}}">{{post.theme}}</a>
+                <p class="post-text"  data-text="{{post.text}}">{{post.text | truncate(150, True, '...')}}</p>
             </div>
         {% endfor %}
     </div>

@@ -25,7 +25,7 @@
 .container .post .post-theme {
   flex: 1;
   text-decoration: none;
-  font-size: 24px;
+  font-size: 30px;
   font-weight: bolder;
   margin: 10px 0;
 }
@@ -43,12 +43,28 @@
   cursor: pointer;
   filter: invert(40%);
 }
-.container .post div {
+.container .post div:nth-child(2) {
   display: flex;
   justify-content: space-between;
-  font-size: 18px;
+  font-size: 26px;
 }
-.container .post div p {
-  margin: 0;
+.container .post .posts-container-created div {
+  display: flex;
+  align-items: center;
+}
+.container .post .posts-container-created div img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  overflow: hidden;
+  -o-object-fit: cover;
+     object-fit: cover;
+  margin-right: 20px;
+}
+.container .post .posts-container-created .post-created {
+  margin-right: 30px;
+}
+.container .post .post-text {
+  font-size: 26px;
   margin-top: 10px;
 }
