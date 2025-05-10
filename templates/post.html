@@ -29,6 +29,7 @@
         <div class="comments">
             {% for comment in comments %}
             <div class="comments-comment" id="comment-{{comment.id}}">
+                <p class="comment-id">{{comment.id}} {{comment.post_id}}</p>
                 {% if session['user'] == comment.user_id or access == 'admin' %}
                 <div class="comments-comment-edit">
                     {% if session['user'] == comment.user_id %}
@@ -39,12 +40,12 @@
                 {% endif %}
                 <div class="comments-comment-title">
                     <div>
-                        <img src="{{ url_for('static', filename=post.user.photo) if post.user.photo else url_for('static', filename='img/person.svg') }}" alt="">
-                        <p class="user-{{post.user.id}}">{{post.user.username}}{% if access == 'admin' %}<button class="ban-button" value="{{post.user.id}}" data-user="{{post.user.username}}">забанить</button>{% endif %}</p>
+                        <img src="{{ url_for('static', filename=comment.user.photo) if comment.user.photo else url_for('static', filename='img/person.svg') }}" alt="">
+                        <p class="user-{{comment.user_id}}">{{comment.user.username}}{% if access == 'admin' %}<button class="ban-button" value="{{comment.user_id}}" data-user="{{comment.user.username}}">забанить</button>{% endif %}</p>
                     </div>
                     <p class="comment-created">{{comment.created_at.strftime('%Y-%m-%d %H:%M')}}</p>  
                 </div>
-                <p class="comment-text" data-text="{{comment.text}}">{{comment.text | truncate(100, True, '...')}}</p>
+                <p class="comment-text" data-text="{{comment.text}}">{{comment.text}}</p>
             </div>
             {% endfor %}
         </div>

@@ -30,7 +30,7 @@
   padding: 20px;
 }
 .post-main div p {
-  font-size: 14px;
+  font-size: 18px;
   margin: 5px 10px;
 }
 .post-main h2 {
@@ -124,6 +124,11 @@
   -o-object-fit: cover;
      object-fit: cover;
   margin-right: 10px;
+}
+.post-comments .comments .comments-comment .comment-id {
+  margin: 0;
+  opacity: 50%;
+  height: 0;
 }
 .post-comments .comments .comments-comment .comment-text {
   font-size: 22px;

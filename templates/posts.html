@@ -28,7 +28,7 @@
                     </div>
                     <p class="post-created">{{post.created_at.strftime('%Y-%m-%d %H:%M')}}</p> 
                 </div> 
-                <a class="post-theme" href="{{url_for('post', post=post.id)}}">{{post.theme}}</a>
+                <a class="post-theme" href="{{url_for('post', post=post.id)}}">{{post.theme | truncate(40, True, '...')}}</a>
                 <p class="post-text"  data-text="{{post.text}}">{{post.text | truncate(150, True, '...')}}</p>
             </div>
         {% endfor %}
