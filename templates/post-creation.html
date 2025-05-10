@@ -9,10 +9,12 @@
         <div class="admin-div">
             <p class="admin-p"></p>
             <form id="form-create-section">
+                <label for="create-section">Создать раздел</label>
                 <input type="text" name="create-section" placeholder="раздел" id="create-section">
                 <button>Добавить раздел</button>
             </form>
             <form id="form-create-category">
+                <label for="create-category">Добавить категорию</label>
                 <input type="text" name="create-category" placeholder="категория" id="create-category">
                 <select id="create-category-section" name="create-category-section" required>
                     <option value="">К какому разделу относится</option>
@@ -21,6 +23,26 @@
                     {% endfor %}
                 </select>
                 <button>Добавить категорию</button>
+            </form>
+            <form id="form-delete-section">
+                <label for="delete-section">Удалить раздел</label>
+                <select id="delete-section" name="delete-section" required>
+                    <option value="">Выберите раздел</option>
+                    {% for section in sections %}
+                        <option value="{{section.id}}">{{section.section}}</option>
+                    {% endfor %}
+                </select>
+                <button>Удалить</button>
+            </form>
+            <form id="form-delete-category">
+                <label for="delete-category">Удалить категорию</label>
+                <select id="delete-category" name="delete-category" required>
+                    <option value="">Выберите категорию</option>
+                    {% for category in category %}
+                        <option value="{{category.id}}">{{category.category}}</option>
+                    {% endfor %}
+                </select>
+                <button>Удалить категорию</button>
             </form>
         </div>
     </div>

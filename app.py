@@ -29,15 +29,15 @@ class ForumSections(db.Model):
     __tablename__ = 'forum_sections'
     id = db.Column(db.Integer, primary_key=True)
     section = db.Column(db.String(32), unique=True, nullable=False)
-    category = db.relationship('ForumCategory', backref='section', lazy=True)
-    posts = db.relationship('ForumPosts', backref='section', lazy=True)
+    category = db.relationship('ForumCategory', backref='section', lazy=True, cascade="all, delete-orphan")
+    posts = db.relationship('ForumPosts', backref='section', lazy=True, cascade="all, delete-orphan")
 
 class ForumCategory(db.Model):
     __tablename__ = 'forum_categories'
     id = db.Column(db.Integer, primary_key=True)
     category = db.Column(db.String(32), unique=True, nullable=False)
     section_id = db.Column(db.Integer, db.ForeignKey('forum_sections.id'), nullable=False)
-    posts = db.relationship('ForumPosts', backref='category', lazy=True)
+    posts = db.relationship('ForumPosts', backref='category', lazy=True, cascade="all, delete-orphan")
 
 class ForumPosts(db.Model):
     __tablename__ = 'forum_posts'
@@ -235,6 +235,7 @@ def create_section():
             db.session.commit()
             return jsonify({'answer': True,'message': 'Успешно'})
         except:
+             db.session.rollback()
              return jsonify({'answer': False,'message': 'Возникла ошибка'})
 
 @app.route('/create-category', methods=['POST'])
@@ -252,8 +253,38 @@ def create_category():
             db.session.commit()
             return jsonify({'answer': True,'message': 'Успешно'})
         except:
+             db.session.rollback()
              return jsonify({'answer': False,'message': 'Возникла ошибка'})
 
+@app.route('/delete-section', methods=['POST'])
+def delete_section():
+    if 'user' in session and (Users.query.filter_by(id=session['user']).first()).access =='admin':
+        section = request.form['delete-section']
+        if not section:
+            return jsonify({'answer': False,'message': 'Секция не найдена'}) 
+        try:
+            delete_section = ForumSections.query.filter_by(id=section).first()
+            db.session.delete(delete_section)
+            db.session.commit()
+            return jsonify({'answer': True,'message': 'Успешно'})
+        except:
+             db.session.rollback()
+             return jsonify({'answer': False,'message': 'Возникла ошибка'})
+        
+@app.route('/delete-category', methods=['POST'])
+def delete_category():
+    if 'user' in session and (Users.query.filter_by(id=session['user']).first()).access =='admin':
+        category = request.form['delete-category']
+        if not category:
+            return jsonify({'answer': False,'message': 'Категория не найдена'}) 
+        try:
+            delete_category = ForumCategory.query.filter_by(id=category).first()
+            db.session.delete(delete_category)
+            db.session.commit()
+            return jsonify({'answer': True,'message': 'Успешно'})
+        except:
+             db.session.rollback()
+             return jsonify({'answer': False,'message': 'Возникла ошибка'})
 
 @app.route('/posts')
 def posts():

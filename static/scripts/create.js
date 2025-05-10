@@ -45,7 +45,7 @@ adminBtn.addEventListener('click', function(){
         document.querySelector('.admin-div').style.maxHeight='0';
     } else {
         isOpen=true;
-        document.querySelector('.admin-div').style.maxHeight='240px';
+        document.querySelector('.admin-div').style.maxHeight='1000px';
     }
 })
 
@@ -81,6 +81,45 @@ formCreateCategory.addEventListener('submit', function(event){
         if(data.answer){
             document.querySelector('.admin-p').textContent = data.message;
             formCreateCategory.reset()
+        } else {
+            document.querySelector('.admin-p').textContent = data.message;
+        }
+    })
+})
+
+const formDeleteSection = document.getElementById('form-delete-section');
+const formDeleteCategory = document.getElementById('form-delete-category');
+
+formDeleteSection.addEventListener('submit', function(event){
+    event.preventDefault()
+    const newData = new FormData(this)
+    fetch('/delete-section', {
+        method: 'POST',
+        body: newData
+    })
+    .then(response=>response.json())
+    .then(data=>{
+        if(data.answer){
+            document.querySelector('.admin-p').textContent = data.message;
+            formDeleteSection.reset()
+        } else {
+            document.querySelector('.admin-p').textContent = data.message;
+        }
+    })
+})
+
+formDeleteCategory.addEventListener('submit', function(event){
+    event.preventDefault()
+    const newData = new FormData(this)
+    fetch('/delete-category', {
+        method: 'POST',
+        body: newData
+    })
+    .then(response=>response.json())
+    .then(data=>{
+        if(data.answer){
+            document.querySelector('.admin-p').textContent = data.message;
+            formDeleteCategory.reset()
         } else {
             document.querySelector('.admin-p').textContent = data.message;
         }
